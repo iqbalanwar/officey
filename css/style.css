@@ -1,0 +1,19 @@
+h1{
+  font-size: 40px;
+}
+
+label {
+  font-size: 20px;
+}
+
+button {
+  font-size: 20px;
+}
+
+input[type="text"] {
+  font-size: 20px;
+}
+
+input[type="password"] {
+  font-size: 20px;
+}
