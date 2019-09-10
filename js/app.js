@@ -1,9 +1,12 @@
-// MY TOKEN: "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpcWJhbEBhbndhci5jb20iLCJleHAiOjE1NjgwNzEwNjMsImlhdCI6MTU2ODA1MzA2M30.cm19HinmEzC22YeBU_nV8Kvm5VGWNR6mzqTTOfrpgfan4GRceNIGUP-iTxaSb2aJ3hN6dI9RCGPlE-7Fixpvog"
+// window.onload = function () {
+//     document.getElementById('search-input').addEventListener('click', searchKeyPress);
+//     document.getElementById('search-submit').addEventListener('click', redirect);
 
-let userToken = "";
 
-function makeUser(e) {
-    e.preventDefault();
+
+// };
+
+function makeUser() {
     const makeEmail = document.querySelector('.email').value;
     const makePassword = document.querySelector('.password').value;
     const makeUsername = document.querySelector('.username').value;
@@ -19,25 +22,25 @@ function makeUser(e) {
             username: makeUsername
         })
     })
-
-
-
     // CHECK IF USER EXISTS? IF YES, POST ERROR
     // ALSO REFRESH TO LANDING PAGE
         .then((res) =>{
-            console.log(res);
+            return res.json();
+        })
+        .then((res) => {
+            localStorage.setItem('user', res.token);
+            if (res.token) {
+                window.location.href = "landing.html";
+            }
+            // makePost();
         })
         .catch((error) => {
             console.log(error);
         })
 }
-const newUser = document.querySelector('.submit').addEventListener("click", makeUser);
-
-
 
 function loginUser() {
     // LOGIN USER USING THE CREDENTIALS
-    
     const userEmail = document.querySelector('.loginEmail').value;
     const userPassword = document.querySelector('.loginPassword').value;
 
@@ -51,7 +54,6 @@ function loginUser() {
             password: userPassword
         })
     })
-    
 
     // CHECK IF USER EXISTS? IF NO, POST ERROR
     // ALSO REFRESH TO LANDING PAGE        
@@ -59,16 +61,24 @@ function loginUser() {
             return res.json();
         })
         .then((res) =>{
-            console.log(res);
-            userToken = res.token;
-            return userToken;
+            localStorage.setItem('user', res.token);
+            if (res.token) {
+                window.location.href = "landing.html";
+            }
         })
         .catch((error) =>{
             console.log(error);
         })
 }
-const login = document.querySelector('.loginSubmit').addEventListener("click", loginUser);
+if(window.location.pathname == "/regLogin.html") {
+    document.querySelector('.submit').addEventListener("click", makeUser);
+    document.querySelector('.loginSubmit').addEventListener("click", loginUser);
+}
 
-// function refreshToLanding() {
+
+
+// function postWithDom() {
 
 // }
+
+// function makePost();
