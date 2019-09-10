@@ -1,18 +1,6 @@
 // MY TOKEN: "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpcWJhbEBhbndhci5jb20iLCJleHAiOjE1NjgwNzEwNjMsImlhdCI6MTU2ODA1MzA2M30.cm19HinmEzC22YeBU_nV8Kvm5VGWNR6mzqTTOfrpgfan4GRceNIGUP-iTxaSb2aJ3hN6dI9RCGPlE-7Fixpvog"
 
-// function getUserData() {
-//     fetch('http://thesi.generalassemb.ly:8080/posts')
-//         .then((res) =>{
-//             return res.json();
-//         })
-//         .then((res) => {
-//             console.log(res);
-//             return res;
-//         })
-//         .catch((err) =>{
-//             console.log(error);
-//         })
-// }
+let userToken = "";
 
 function makeUser(e) {
     e.preventDefault();
@@ -72,6 +60,8 @@ function loginUser() {
         })
         .then((res) =>{
             console.log(res);
+            userToken = res.token;
+            return userToken;
         })
         .catch((error) =>{
             console.log(error);
@@ -79,6 +69,6 @@ function loginUser() {
 }
 const login = document.querySelector('.loginSubmit').addEventListener("click", loginUser);
 
-function refreshToLanding() {
-    
-}
+// function refreshToLanding() {
+
+// }
