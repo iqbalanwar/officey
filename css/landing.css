@@ -15,3 +15,35 @@
 .content h1{
   text-align: center;
 }
+
+.title{
+  display: block;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  font-size: 20px;
+}
+
+textarea {
+  font-size: 20px;
+}
+
+ul li {
+  list-style-type: none;
+  margin-left: -30px;
+}
+
+ul li h3{
+  font-size: 20px;
+}
+
+ul li p {
+  font-size: 15px;
+}
+
+ul{
+  border: 1px solid #EEE;
+  border-radius: 25px;
+  background-color: lightblue;
+}
