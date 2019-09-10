@@ -32,6 +32,7 @@ textarea {
 ul li {
   list-style-type: none;
   margin-left: -30px;
+  background-color: lightblue;
 }
 
 ul li h3{
@@ -45,5 +46,4 @@ ul li p {
 ul{
   border: 1px solid #EEE;
   border-radius: 25px;
-  background-color: lightblue;
 }
