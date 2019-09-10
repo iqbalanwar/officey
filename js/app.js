@@ -1,11 +1,3 @@
-// window.onload = function () {
-//     document.getElementById('search-input').addEventListener('click', searchKeyPress);
-//     document.getElementById('search-submit').addEventListener('click', redirect);
-
-
-
-// };
-
 function makeUser() {
     const makeEmail = document.querySelector('.email').value;
     const makePassword = document.querySelector('.password').value;
@@ -22,6 +14,7 @@ function makeUser() {
             username: makeUsername
         })
     })
+
     // CHECK IF USER EXISTS? IF YES, POST ERROR
     // ALSO REFRESH TO LANDING PAGE
         .then((res) =>{
@@ -29,7 +22,7 @@ function makeUser() {
         })
         .then((res) => {
             localStorage.setItem('user', res.token);
-            if (res.token) {
+            if (res.token) { // DO I GET A RESPONSE? IF YES:
                 window.location.href = "landing.html";
             }
             // makePost();
@@ -38,7 +31,6 @@ function makeUser() {
             console.log(error);
         })
 }
-
 function loginUser() {
     // LOGIN USER USING THE CREDENTIALS
     const userEmail = document.querySelector('.loginEmail').value;
@@ -62,7 +54,7 @@ function loginUser() {
         })
         .then((res) =>{
             localStorage.setItem('user', res.token);
-            if (res.token) {
+            if (res.token) { // DO I GET A RESPONSE? IF YES:
                 window.location.href = "landing.html";
             }
         })
@@ -77,8 +69,40 @@ if(window.location.pathname == "/regLogin.html") {
 
 
 
-// function postWithDom() {
+// function makePost();
+// TAKES USER INPUT
+// PUTS IT IN THE DOM (LANDING.HTML)
+// SUBMIT BUTTON FROM /LANDING.HTML TAKEN
+function makePost(event) {
+    event.preventDefault();
 
+    const title = document.querySelector('.postTitle').value;
+    const post = document.querySelector('.postField').value;
+
+    fetch("http://thesi.generalassemb.ly:8080/post", {
+        method: 'POST',
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user'),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            description: post
+        })
+    })
+        .then((res) => {
+            postToLanding(res);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+
+}
+// function postWithLanding() { // Posts our post to landing lol
+//     fetch('')
 // }
 
-// function makePost();
+
+if (window.location.path == "/landing.html") {
+    document.querySelector('.postSubmit').addEventListener("click", makePost);
+}
