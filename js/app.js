@@ -81,34 +81,66 @@ function makeAndShowPosts() {
         const title = document.querySelector('.postTitle').value;
         const post = document.querySelector('.postField').value;
 
-        fetch("http://thesi.generalassemb.ly:8080/post", {
-            method: 'POST',
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem('user'),
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title: title,
-                description: post
-            })
+    fetch("http://thesi.generalassemb.ly:8080/post", {
+        method: 'POST',
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user'),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            description: post
         })
-            .then((res) => {
-                postToLanding(res);
-                //console.log(window.location);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+    })
+        .then((res)=>{
+            return res.json();
+        })
+        .then((res) => {
+            // const postId = res.id;
+            // console.log(postId);
+            postToLanding(res);
+            // return res;
+            //console.log(window.location);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
 
-    }
-    // TAKES USER INPUT
-    // PUTS USER INPUT INTO A LIST ITEM
-    // APPENDS LIST ITEM TO LANDING.HTML
-    // Posts our post to landing lol
-    function postToLanding() {
-        fetch("http://thesi.generalassemb.ly:8080/user/post", {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem('user')
+}
+// TAKES USER INPUT
+// PUTS USER INPUT INTO A LIST ITEM
+// APPENDS LIST ITEM TO LANDING.HTML
+// Posts our post to landing lol
+function postToLanding() {
+
+    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user')
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            const list = document.querySelector('.allPosts');
+            // window.location.reload(false);
+            // if (window.location.href.indexOf('reload') == -1) {
+            //     window.location.replace(window.location.href + '?reload');
+            // }
+
+            for (let i = 0; i < res.length; i++) {
+                const item = document.createElement('li');
+                item.id = `${res[i].id}`;
+                const title = document.createElement('h3');
+                const post = document.createElement('p');
+
+                title.innerText = res[i].title;
+                post.innerText = res[i].description;
+
+                item.appendChild(title);
+                item.appendChild(post);
+
+                list.appendChild(item);
             }
         })
             .then((res) => {
@@ -154,6 +186,146 @@ makeAndShowPosts();
 
 
 
+
+
+
+
+// GET USER POSTS
+// STORE ALL IDS IN ARRAY
+// TAKES USER INPUT FOR WHAT THEY WANT TO DELETE
+// CHECK FOR THAT ID IN THE ARRAY
+// DELETE? COMMENT?
+// function commentToPost() {
+//     fetch(`http://thesi.generalassemb.ly:8080/comment/${postId}`)
+// }
+
+
+
+
+
+
+
+
+
+// WHEN POSTING FULL LIST OF POSTS, ONLY ALLOW DELETE FOR YOUR POSTS
+// - Post to landing?
+// - ONLY ALLOW DELETE BUTTON ON MY POSTS
+function getPostId() {
+    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user')
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            console.log(res[0].id);
+            const postId = res[0].id;
+            return postId;
+            // console.log(res[0]);
+        })
+}
+
+
+
+
+
+
+
+// < #${id#} >
+
+
+
+// MAKING IT SO WE CAN VIEW COMMENTS IN DOM
+// TAKE A RESPONSE AND SEND THEM TO THE DOM (obviously those comments are attached to an ID)
+// In DOM, run this function
+function makeComment(event) {
+    event.preventDefault();
+
+    getPostId();
+
+    const comment = document.querySelector('.commentField').value;
+
+    fetch(`http://thesi.generalassemb.ly:8080/comment/${postId}`, {
+        method: 'POST',
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user'),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            text: comment
+        })
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            commentToPost(res);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+// TAKES USER INPUT
+// PUTS USER INPUT INTO A LIST ITEM
+// APPENDS LIST ITEM TO LANDING.HTML
+// Posts our post to landing lol
+function commentToPost() {
+
+    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user')
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            const list = document.querySelector('.allPosts');
+            // window.location.reload(false);
+            // if (window.location.href.indexOf('reload') == -1) {
+            //     window.location.replace(window.location.href + '?reload');
+            // }
+
+            for (let i = 0; i < res.length; i++) {
+                const item = document.createElement('li');
+                const title = document.createElement('h3');
+                const post = document.createElement('p');
+
+                title.innerText = res[i].title;
+                post.innerText = res[i].description;
+
+                item.appendChild(title);
+                item.appendChild(post);
+
+                list.appendChild(item);
+            }
+
+            // window.location.reload(false);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // GET USER POSTS WHICH IS AN ARRAY
 // TAKE USER CHOICE (input) OF WHICH ITEM THEY WANT TO DELETE
 // GO THROUGH THE ARRAY TO GET TO THAT INDEX ITEM OF THE USER CHOICE (store the id)
@@ -178,12 +350,9 @@ function getPostId() {
 
 /*
 OUR PROBLEMS RIGHT NOW:
-- The post submit should only be functional in the landing page, and not run globally
 
-- The list of all posts should show up by default
+- The list of all posts should show up by default (TECHNICALLY FIXED)
     - Right now, the workaround is that we can see all the posts only when we post
-- The list of all posts should be reversed, so the newest content in on top
-- DELETE EVERYTHING (repeats) SHOWN IN THE DOM USING .remove()
 
 - Show the user that their registration already exists/login does not exist
 - When the user is logged in, don't allow them to access the login page
