@@ -71,86 +71,80 @@ if(window.location.pathname == "/regLogin.html") {
 
 
 
-function makeAndShowPosts() {
-    // TAKES USER INPUT
-    // CALLS A FUNCTION TO POST IT IN THE DOM (postToLanding())
-    // SUBMIT BUTTON FROM /LANDING.HTML TAKEN
-    function makePost(event) {
-        event.preventDefault();
 
-        const title = document.querySelector('.postTitle').value;
-        const post = document.querySelector('.postField').value;
+// TAKES USER INPUT
+// CALLS A FUNCTION TO POST IT IN THE DOM (postToLanding())
+// SUBMIT BUTTON FROM /LANDING.HTML TAKEN
+function makePost(event) {
+    event.preventDefault();
+    const title = document.querySelector('.postTitle').value;
+    const post = document.querySelector('.postField').value;
 
-        fetch("http://thesi.generalassemb.ly:8080/post", {
-            method: 'POST',
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem('user'),
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title: title,
-                description: post
-            })
+    fetch("http://thesi.generalassemb.ly:8080/post", {
+        method: 'POST',
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user'),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            description: post
         })
-            .then((res) => {
-                postToLanding(res);
-                //console.log(window.location);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
-    }
-    // TAKES USER INPUT
-    // PUTS USER INPUT INTO A LIST ITEM
-    // APPENDS LIST ITEM TO LANDING.HTML
-    // Posts our post to landing lol
-    function postToLanding() {
-        fetch("http://thesi.generalassemb.ly:8080/user/post", {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem('user')
-            }
+    })
+        .then((res) => {
+            postToLanding(res);
+            return res;
+            //console.log(window.location);
         })
-            .then((res) => {
-                return res.json();
-            })
-            .then((res) => {
-                const list = document.querySelector('.allPosts');
+        .catch((error) => {
+            console.log(error);
+        })
 
-                for (let i = 0; i < res.length; i++) {
-                    const item = document.createElement('li');
-                    const title = document.createElement('h3');
-                    const post = document.createElement('p');
-
-                    item.appendChild(title);
-                    item.appendChild(post);
-                    title.innerText = res[i].title;
-                    post.innerText = res[i].description;
-
-                    list.appendChild(item);
-                }
-
-                // for (let j = 0; j < (res.length-1); j++) {
-                //     document.getElementsByTagName("li")[j].innerHTML = "";
-                // }
-                
-                // const childs = Array.from(list.childNodes).reverse();
-                // /* ul_list.innerHTML = ""; */
-                // childs.forEach(item => {
-                //     ul_list.appendChild(item);
-                // });
-
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    }
-    // document.querySelector('.postSubmit').addEventListener("click", makePost);
-    if (window.location.path == "/landing.html") {
-        document.querySelector('.postSubmit').addEventListener("click", makePost);
-    }
 }
-makeAndShowPosts();
+// TAKES USER INPUT
+// PUTS USER INPUT INTO A LIST ITEM
+// APPENDS LIST ITEM TO LANDING.HTML
+// Posts our post to landing lol
+function postToLanding() {
+
+    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user')
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            const list = document.querySelector('.allPosts');
+            // window.location.reload(false);
+            // if (window.location.href.indexOf('reload') == -1) {
+            //     window.location.replace(window.location.href + '?reload');
+            // }
+            
+            for (let i = 0; i < res.length; i++) {
+                const item = document.createElement('li');
+                const title = document.createElement('h3');
+                const post = document.createElement('p');
+
+                item.appendChild(title);
+                item.appendChild(post);
+                title.innerText = res[i].title;
+                post.innerText = res[i].description;
+
+                list.appendChild(item);
+            }
+            
+            // window.location.reload(false);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+postToLanding();
+if (window.location.pathname == "/landing.html") {
+    document.querySelector('.postSubmit').addEventListener("click", makePost);
+}
 
 
 
@@ -158,19 +152,20 @@ makeAndShowPosts();
 // TAKE USER CHOICE (input) OF WHICH ITEM THEY WANT TO DELETE
 // GO THROUGH THE ARRAY TO GET TO THAT INDEX ITEM OF THE USER CHOICE (store the id)
 // Separate function: DELETE THAT ID WHICH WAS STORED
-function getPostId() {
-    fetch("http://thesi.generalassemb.ly:8080/user/post", {
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('user')
-        }
-    })
-        // .then((res) => {
-        //     return res.json();
-        // })
-        .then((res) => { // Returns null. Wonderful.
-            console.log(res);
-        })
-}
+// function getPostId() {
+//     fetch("http://thesi.generalassemb.ly:8080/user/post", {
+//         headers: {
+//             "Authorization": "Bearer " + localStorage.getItem('user')
+//         }
+//     })
+//         // .then((res) => {
+//         //     return res.json();
+//         // })
+//         .then((res) => { // Returns null. Wonderful.
+//             console.log(res);
+//         })
+// }
+// getPostId();
 
 
 
