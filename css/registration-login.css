@@ -17,3 +17,16 @@ input[type="text"] {
 input[type="password"] {
   font-size: 20px;
 }
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+    margin: 20px 0;
+}
+.navbar a {
+    text-decoration: none !important;
+}
+.navbar img {
+    background-color: red;
+}

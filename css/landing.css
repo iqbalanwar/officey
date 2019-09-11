@@ -16,7 +16,7 @@
   text-align: center;
 }
 
-.title{
+.postTitle{
   display: block;
   margin-bottom: 20px;
 }
@@ -25,7 +25,7 @@ input[type="text"] {
   font-size: 20px;
 }
 
-textarea {
+.postField {
   font-size: 20px;
 }
 
