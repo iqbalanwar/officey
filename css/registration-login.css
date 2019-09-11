@@ -29,4 +29,12 @@ input[type="password"] {
 }
 .navbar img {
     background-color: red;
+    width: 100px;
+    height: 100px;
+}
+
+.container form{
+  display: flex;
+  flex-direction: column;
+  width: 200px;
 }

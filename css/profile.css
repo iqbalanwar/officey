@@ -9,4 +9,38 @@
 }
 .navbar img {
     background-color: red;
+    width: 100px;
+    height: 100px;
+}
+
+.inputContainer img {
+  display: block;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.inputContainer{
+  display: block;
+  margin: 0 auto;
+  width: 200px;
+  padding: 10px;
+  border-radius: 25px;
+  background-color: lightblue;
+
+}
+
+.inputContainer input {
+  display: block;
+}
+
+input {
+  font-size: 20px;
+}
+label {
+  font-size: 20px;
+}
+
+h1{
+  text-align: center;
 }

@@ -9,6 +9,8 @@
 }
 .navbar img {
     background-color: red;
+    width: 100px;
+    height: 100px;
 }
 
 
@@ -48,4 +50,5 @@ ul{
   border-radius: 25px;
   display: flex;
   flex-direction: column-reverse;
+  background-color: white;
 }
