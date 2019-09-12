@@ -2,19 +2,21 @@
     display: flex;
     justify-content: space-around;
     font-size: 20px;
-    margin: 20px 0;
     position: fixed;
     top: 0;
     width: 100%;
+    background-color: white;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 .navbar a {
     text-decoration: none !important;
 }
 .navbar img {
     background-color: red;
-    width: 180px;
-    height: 200px;
-    margin: -6% 0;
+    height: 60px;
+    width: 150px;
+    margin: -1% 0;
 }
 
 
@@ -28,6 +30,7 @@
 }
 
 input[type="text"] {
+  display: block;
   font-size: 20px;
 }
 
@@ -35,11 +38,6 @@ input[type="text"] {
   font-size: 20px;
 }
 
-ul li {
-  list-style-type: none;
-  margin-left: -30px;
-  background-color: lightblue;
-}
 
 ul li h3{
   font-size: 20px;
@@ -50,13 +48,63 @@ ul li p {
 }
 
 ul{
-  border: 1px solid #EEE;
-  border-radius: 25px;
-  display: flex;
-  flex-direction: column-reverse;
-  background-color: white;
+width: 900px;
+
 }
 
 body{
   padding-top: 90px;
+}
+
+.allPosts{
+  display: flex;
+  flex-direction: column-reverse;
+  list-style-type: none;
+  border-radius: 10px;
+}
+
+.post{
+  background-color: lightblue;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.posttTitle{
+
+}
+
+.postText{
+
+}
+
+.commentField{
+
+}
+
+.submitComment{
+
+}
+
+.listOfComments{
+margin: 60px;
+list-style-type: none;
+
+}
+
+.comment{
+  background-color: lightgrey;
+  border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  width: 200px;
+  display: block;
+}
+
+.commentText{
+
+}
+
+.deleteComment{
+
 }
