@@ -32,6 +32,7 @@
 
 .inputContainer input {
   display: block;
+  width: 195px;
 }
 
 input {
