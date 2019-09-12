@@ -112,7 +112,7 @@ function makePost(event) {
 // Posts our post to landing lol
 function postToLanding() {
 
-    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+    fetch("http://thesi.generalassemb.ly:8080/post/list", {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('user')
         }
@@ -141,13 +141,14 @@ function postToLanding() {
                 post.innerText = res[i].description;
 
 
-                // VIEW COMMENTS ON A POST
+
+                seeComments(item.id);
 
 
 
 
                 // CREATE A COMMENT FORM, WITH A TEXT AREA, SUBMIT AND DELETE BUTTONS
-                const commentForm = document.createElement('form');
+                //const commentForm = document.createElement('form');
                 const commentField = document.createElement('textarea');
                 commentField.classList.add("commentField");
                 const submitComment = document.createElement('button');
@@ -157,16 +158,13 @@ function postToLanding() {
                     event.preventDefault();
                     createComment(event.target.parentNode.getAttribute('id'));
                 });
-                const deleteComment = document.createElement('button');
-                deleteComment.classList.add("deleteComment");
-                deleteComment.innerText = "Delete Comment";
 
                 // COMMENT FORM TAKES FIELD, SUBMIT BTN, DELETE BTN
-                commentForm.append(commentField, submitComment, deleteComment);
+                // commentForm.append(commentField, submitComment, deleteComment);
 
                 // ITEM TAKES TITLE, POST, AND COMMENT FORM
-                item.append(title, post, commentForm);
-                list.appendChild(item);
+                item.append(title, post, commentField, submitComment);
+                list.append(item);
             }
         })
         .catch((error) => {
@@ -183,7 +181,7 @@ function createComment(id) {
     // PARENT NODE IS THE POST
     // THEN CALL CREATE COMMENT
     // CREATE COMMENT WILL POST THE COMMENT
-    let commendFieldInput = document.getElementById(`${id}`).querySelector('.commentField').value;
+    let commentFieldInput = document.getElementById(`${id}`).querySelector('.commentField').value;
 
     fetch(`http://thesi.generalassemb.ly:8080/comment/${id}`, {
         method: 'POST',
@@ -192,7 +190,7 @@ function createComment(id) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            text: commmentFieldInput
+            text: commentFieldInput
         })
     })
         .then((res) => {
@@ -201,8 +199,54 @@ function createComment(id) {
         .then((error) => {
             console.log(error);
         })
+    window.location.reload(false);
 
 }
+// VIEW COMMENTS ON A POST
+// 
+// GET REQUEST
+function seeComments(id) {
+    fetch(`http://thesi.generalassemb.ly:8080/post/${id}/comment`, {
+        headers: {
+            "Content-Type":"application.json"
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+
+            const listOfComments = document.createElement('ul');
+            const post = document.getElementById(`${id}`);
+
+            for (let i = 0; i < res.length; i++) {
+                const commentItem = document.createElement('li');
+                const commentText = document.createElement('p');
+                commentText.innerText = res[i].text;
+
+                commentItem.append(commentText);
+                listOfComments.append(commentItem);
+
+
+                // 
+
+
+                // const deleteComment = document.createElement('button');
+                // deleteComment.classList.add("deleteComment");
+                // deleteComment.innerText = "Delete Comment";
+
+
+
+            }
+            
+            post.append(listOfComments);
+        })
+        .then((error) => {
+            console.log(error);
+        })
+
+}
+
 
 
 
@@ -299,7 +343,6 @@ OUR PROBLEMS RIGHT NOW:
 - When the user is logged in, don't allow them to access the login page
 
 - DELETE POSTS
-- MAKE COMMENTS
 - DELETE COMMENTS
 - UPDATE PROFILE (which is just the mobile #)
 
