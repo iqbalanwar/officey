@@ -128,20 +128,28 @@ function postToLanding() {
             // }
             
             for (let i = 0; i < res.length; i++) {
+                // CREATE AN ITEM, WITH H3 AND P TAGS
                 const item = document.createElement('li');
                 item.id = `${res[i].id}`;
                 const title = document.createElement('h3');
                 const post = document.createElement('p');
-                const deletePost = document.createElement('button');
-                deletePost.classList.add("deletePost");
-                deletePost.innerText = "Delete Post";
-                //deletePost.addEventListener('click', deletePost);
-
+                // const deletePost = document.createElement('button');
+                // deletePost.classList.add("deletePost");
+                // deletePost.innerText = "Delete Post";
+                // deletePost.addEventListener('click', deletePost);
                 title.innerText = res[i].title;
                 post.innerText = res[i].description;
 
+
+                // VIEW COMMENTS ON A POST
+
+
+
+
+                // CREATE A COMMENT FORM, WITH A TEXT AREA, SUBMIT AND DELETE BUTTONS
                 const commentForm = document.createElement('form');
                 const commentField = document.createElement('textarea');
+                commentField.classList.add("commentField");
                 const submitComment = document.createElement('button');
                 submitComment.classList.add("submitComment");
                 submitComment.innerText = "Comment"; 
@@ -153,9 +161,11 @@ function postToLanding() {
                 deleteComment.classList.add("deleteComment");
                 deleteComment.innerText = "Delete Comment";
 
+                // COMMENT FORM TAKES FIELD, SUBMIT BTN, DELETE BTN
                 commentForm.append(commentField, submitComment, deleteComment);
 
-                item.append(title, post, commentForm, deletePost);
+                // ITEM TAKES TITLE, POST, AND COMMENT FORM
+                item.append(title, post, commentForm);
                 list.appendChild(item);
             }
         })
@@ -168,18 +178,29 @@ if (window.location.pathname == "/landing.html") {
     document.querySelector('.postSubmit').addEventListener("click", makePost);
 }
 
-// function returnPostId(event) {
-//     // WHEN SUBMIT COMMENT IS CLICKED, GET THE PARENT NODE'S ID
-//     // THEN CALL CREATE COMMENT
-//     // CREATE COMMENT WILL POST THE COMMENT
-
-//     event.target.parentNode.querySelector('id');
-
-//     createComment(postId);
-// }
-//  document.querySelector('.submitComment').addEventListener("click", returnPostId);
-
 function createComment(id) {
+    // WHEN SUBMIT COMMENT IS CLICKED, GET THE PARENT NODE'S ID
+    // PARENT NODE IS THE POST
+    // THEN CALL CREATE COMMENT
+    // CREATE COMMENT WILL POST THE COMMENT
+    let commendFieldInput = document.getElementById(`${id}`).querySelector('.commentField').value;
+
+    fetch(`http://thesi.generalassemb.ly:8080/comment/${id}`, {
+        method: 'POST',
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user'),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            text: commmentFieldInput
+        })
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((error) => {
+            console.log(error);
+        })
 
 }
 
