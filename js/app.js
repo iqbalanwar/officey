@@ -112,7 +112,7 @@ function makePost(event) {
 // Posts our post to landing lol
 function postToLanding() {
 
-    fetch("http://thesi.generalassemb.ly:8080/post/list", {
+    fetch("http://thesi.generalassemb.ly:8080/user/post", {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('user')
         }
@@ -228,7 +228,7 @@ function seeComments(id) {
                 listOfComments.append(commentItem);
 
 
-                // 
+                // IF 
 
 
                 // const deleteComment = document.createElement('button');
