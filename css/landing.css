@@ -3,14 +3,18 @@
     justify-content: space-around;
     font-size: 20px;
     margin: 20px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
 .navbar a {
     text-decoration: none !important;
 }
 .navbar img {
     background-color: red;
-    width: 100px;
-    height: 100px;
+    width: 180px;
+    height: 200px;
+    margin: -6% 0;
 }
 
 
@@ -51,4 +55,8 @@ ul{
   display: flex;
   flex-direction: column-reverse;
   background-color: white;
+}
+
+body{
+  padding-top: 90px;
 }

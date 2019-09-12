@@ -2,15 +2,20 @@
     display: flex;
     justify-content: space-around;
     font-size: 20px;
-    margin: 20px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: white;
+
 }
 .navbar a {
     text-decoration: none !important;
 }
 .navbar img {
     background-color: red;
-    width: 100px;
-    height: 100px;
+    width: 180px;
+    height: 200px;
+    margin-top: -16% 0;
 }
 
 .inputContainer img {
@@ -21,12 +26,12 @@
 }
 
 .inputContainer{
-  display: block;
-  margin: 0 auto;
+  display: inline-block;
   width: 200px;
   padding: 10px;
   border-radius: 25px;
   background-color: lightblue;
+  margin-right: 150px;
 
 }
 
@@ -44,4 +49,41 @@ label {
 
 h1{
   text-align: center;
+}
+
+.userPosts{
+  border-radius: 25px;
+  background-color: lightblue;
+  width: 800px;
+  border: 1px dotted black;
+  height: 1000px;
+}
+
+.mainContainer{
+  display: inline-flex;
+
+}
+
+ul li {
+  list-style-type: none;
+  background-color: lightblue;
+}
+
+ul li h3{
+  font-size: 20px;
+}
+
+ul li p {
+  font-size: 15px;
+}
+
+ul{
+  border: 1px solid #EEE;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column-reverse;
+  background-color: white;
+}
+body{
+  padding-top: 90px;
 }
