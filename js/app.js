@@ -1,8 +1,14 @@
+if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "regLogin.html") {
+    console.log("You're in your regLogin!");
+    document.querySelector('.submit').addEventListener("click", makeUser);
+    document.querySelector('.loginSubmit').addEventListener("click", loginUser);
+}
+
 function makeUser() {
     const makeEmail = document.querySelector('.email').value;
     const makePassword = document.querySelector('.password').value;
     const makeUsername = document.querySelector('.username').value;
-    localStorage.setItem('username',makeUsername.value);
+    localStorage.setItem('username',makeUsername);
 
     fetch('http://thesi.generalassemb.ly:8080/signup', {
         method: 'POST',
@@ -63,11 +69,6 @@ function loginUser() {
             console.log(error);
         })
 }
-if(window.location.pathname == "/regLogin.html") {
-    document.querySelector('.submit').addEventListener("click", makeUser);
-    document.querySelector('.loginSubmit').addEventListener("click", loginUser);
-}
-
 
 
 
@@ -130,6 +131,7 @@ function postToLanding() {
             for (let i = 0; i < res.length; i++) {
                 // CREATE AN ITEM, WITH H3 AND P TAGS
                 const item = document.createElement('li');
+                item.className = ""
                 item.id = `${res[i].id}`;
                 const title = document.createElement('h3');
                 const post = document.createElement('p');
@@ -171,9 +173,10 @@ function postToLanding() {
             console.log(error);
         })
 }
-postToLanding();
-if (window.location.pathname == "/landing.html") {
-    document.querySelector('.postSubmit').addEventListener("click", makePost);
+
+if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "landing.html") {
+    document.querySelector('.postSubmit').addEventListener("click", makePost); 
+    postToLanding();
 }
 
 function createComment(id) {
@@ -199,7 +202,8 @@ function createComment(id) {
         .then((error) => {
             console.log(error);
         })
-    window.location.reload(false);
+        // FIGURE OUT TO REFRESH THE PAGE ONLY AFTER THE POST WAS FINISHED
+    // window.location.reload(false);
 
 }
 // VIEW COMMENTS ON A POST
@@ -228,13 +232,17 @@ function seeComments(id) {
                 listOfComments.append(commentItem);
 
 
-                // IF 
+                // COMPARE LOCALSTORAGE(USERNAME) TO USER.USERNAME
+                // ONLY MAKE BUTTONS FOR THOSE
+                if (localStorage.getItem('username') == res[i].user.username) {
+                    const deleteComment = document.createElement('button');
+                    deleteComment.classList.add("deleteComment");
+                    deleteComment.innerText = "Delete Comment";
+                    commentItem.append(deleteComment);
+                }
 
 
-                // const deleteComment = document.createElement('button');
-                // deleteComment.classList.add("deleteComment");
-                // deleteComment.innerText = "Delete Comment";
-
+                
 
 
             }
