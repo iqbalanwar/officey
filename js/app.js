@@ -112,7 +112,7 @@ function makePost(event) {
 // Posts our post to landing lol
 function postToLanding() {
 
-    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+    fetch("http://thesi.generalassemb.ly:8080/post/list", {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('user')
         }
@@ -128,20 +128,29 @@ function postToLanding() {
             // }
             
             for (let i = 0; i < res.length; i++) {
+                // CREATE AN ITEM, WITH H3 AND P TAGS
                 const item = document.createElement('li');
                 item.id = `${res[i].id}`;
                 const title = document.createElement('h3');
                 const post = document.createElement('p');
-                const deletePost = document.createElement('button');
-                deletePost.classList.add("deletePost");
-                deletePost.innerText = "Delete Post";
-                //deletePost.addEventListener('click', deletePost);
-
+                // const deletePost = document.createElement('button');
+                // deletePost.classList.add("deletePost");
+                // deletePost.innerText = "Delete Post";
+                // deletePost.addEventListener('click', deletePost);
                 title.innerText = res[i].title;
                 post.innerText = res[i].description;
 
-                const commentForm = document.createElement('form');
+
+
+                seeComments(item.id);
+
+
+
+
+                // CREATE A COMMENT FORM, WITH A TEXT AREA, SUBMIT AND DELETE BUTTONS
+                //const commentForm = document.createElement('form');
                 const commentField = document.createElement('textarea');
+                commentField.classList.add("commentField");
                 const submitComment = document.createElement('button');
                 submitComment.classList.add("submitComment");
                 submitComment.innerText = "Comment"; 
@@ -149,14 +158,13 @@ function postToLanding() {
                     event.preventDefault();
                     createComment(event.target.parentNode.getAttribute('id'));
                 });
-                const deleteComment = document.createElement('button');
-                deleteComment.classList.add("deleteComment");
-                deleteComment.innerText = "Delete Comment";
 
-                commentForm.append(commentField, submitComment, deleteComment);
+                // COMMENT FORM TAKES FIELD, SUBMIT BTN, DELETE BTN
+                // commentForm.append(commentField, submitComment, deleteComment);
 
-                item.append(title, post, commentForm, deletePost);
-                list.appendChild(item);
+                // ITEM TAKES TITLE, POST, AND COMMENT FORM
+                item.append(title, post, commentField, submitComment);
+                list.append(item);
             }
         })
         .catch((error) => {
@@ -168,20 +176,77 @@ if (window.location.pathname == "/landing.html") {
     document.querySelector('.postSubmit').addEventListener("click", makePost);
 }
 
-// function returnPostId(event) {
-//     // WHEN SUBMIT COMMENT IS CLICKED, GET THE PARENT NODE'S ID
-//     // THEN CALL CREATE COMMENT
-//     // CREATE COMMENT WILL POST THE COMMENT
-
-//     event.target.parentNode.querySelector('id');
-
-//     createComment(postId);
-// }
-//  document.querySelector('.submitComment').addEventListener("click", returnPostId);
-
 function createComment(id) {
+    // WHEN SUBMIT COMMENT IS CLICKED, GET THE PARENT NODE'S ID
+    // PARENT NODE IS THE POST
+    // THEN CALL CREATE COMMENT
+    // CREATE COMMENT WILL POST THE COMMENT
+    let commentFieldInput = document.getElementById(`${id}`).querySelector('.commentField').value;
+
+    fetch(`http://thesi.generalassemb.ly:8080/comment/${id}`, {
+        method: 'POST',
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user'),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            text: commentFieldInput
+        })
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((error) => {
+            console.log(error);
+        })
+    window.location.reload(false);
 
 }
+// VIEW COMMENTS ON A POST
+// 
+// GET REQUEST
+function seeComments(id) {
+    fetch(`http://thesi.generalassemb.ly:8080/post/${id}/comment`, {
+        headers: {
+            "Content-Type":"application.json"
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+
+            const listOfComments = document.createElement('ul');
+            const post = document.getElementById(`${id}`);
+
+            for (let i = 0; i < res.length; i++) {
+                const commentItem = document.createElement('li');
+                const commentText = document.createElement('p');
+                commentText.innerText = res[i].text;
+
+                commentItem.append(commentText);
+                listOfComments.append(commentItem);
+
+
+                // 
+
+
+                // const deleteComment = document.createElement('button');
+                // deleteComment.classList.add("deleteComment");
+                // deleteComment.innerText = "Delete Comment";
+
+
+
+            }
+            
+            post.append(listOfComments);
+        })
+        .then((error) => {
+            console.log(error);
+        })
+
+}
+
 
 
 
@@ -278,7 +343,6 @@ OUR PROBLEMS RIGHT NOW:
 - When the user is logged in, don't allow them to access the login page
 
 - DELETE POSTS
-- MAKE COMMENTS
 - DELETE COMMENTS
 - UPDATE PROFILE (which is just the mobile #)
 
