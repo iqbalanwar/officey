@@ -6,16 +6,17 @@
     top: 0;
     width: 100%;
     background-color: white;
-
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 .navbar a {
     text-decoration: none !important;
 }
 .navbar img {
     background-color: red;
-    width: 180px;
-    height: 200px;
-    margin-top: -16% 0;
+    height: 60px;
+    width: 150px;
+    margin: -1% 0;
 }
 
 .inputContainer img {
@@ -52,8 +53,7 @@ h1{
 }
 
 .userPosts{
-  border-radius: 25px;
-  background-color: lightblue;
+  border-radius: 10px;
   width: 800px;
   border: 1px dotted black;
   height: 1000px;
