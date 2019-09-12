@@ -106,9 +106,9 @@ function makePost(event) {
         })
 
 }
-// TAKES USER INPUT
 // PUTS USER INPUT INTO A LIST ITEM
-// APPENDS LIST ITEM TO LANDING.HTML
+// CREATES A FORM FIELD FOR COMMENTS INTO THE LIST ITEM
+// GET THE COMMENTS FOR THE POST
 // Posts our post to landing lol
 function postToLanding() {
 
@@ -132,6 +132,10 @@ function postToLanding() {
                 item.id = `${res[i].id}`;
                 const title = document.createElement('h3');
                 const post = document.createElement('p');
+                const deletePost = document.createElement('button');
+                deletePost.classList.add("deletePost");
+                deletePost.innerText = "Delete Post";
+                //deletePost.addEventListener('click', deletePost);
 
                 title.innerText = res[i].title;
                 post.innerText = res[i].description;
@@ -139,16 +143,21 @@ function postToLanding() {
                 const commentForm = document.createElement('form');
                 const commentField = document.createElement('textarea');
                 const submitComment = document.createElement('button');
+                submitComment.classList.add("submitComment");
+                submitComment.innerText = "Comment"; 
+                submitComment.addEventListener('click', function () {
+                    event.preventDefault();
+                    createComment(event.target.parentNode.getAttribute('id'));
+                });
+                const deleteComment = document.createElement('button');
+                deleteComment.classList.add("deleteComment");
+                deleteComment.innerText = "Delete Comment";
 
-                // // commentForm.appendChild(commentField);
-                // // commentForm.appendChild(submitComment);
-                commentForm.append(commentField, submitComment);
+                commentForm.append(commentField, submitComment, deleteComment);
 
-                item.append(title, post, commentForm);
+                item.append(title, post, commentForm, deletePost);
                 list.appendChild(item);
             }
-            
-            // window.location.reload(false);
         })
         .catch((error) => {
             console.log(error);
@@ -159,6 +168,20 @@ if (window.location.pathname == "/landing.html") {
     document.querySelector('.postSubmit').addEventListener("click", makePost);
 }
 
+// function returnPostId(event) {
+//     // WHEN SUBMIT COMMENT IS CLICKED, GET THE PARENT NODE'S ID
+//     // THEN CALL CREATE COMMENT
+//     // CREATE COMMENT WILL POST THE COMMENT
+
+//     event.target.parentNode.querySelector('id');
+
+//     createComment(postId);
+// }
+//  document.querySelector('.submitComment').addEventListener("click", returnPostId);
+
+function createComment(id) {
+
+}
 
 
 
@@ -173,14 +196,6 @@ if (window.location.pathname == "/landing.html") {
 // function commentToPost() {
 //     fetch(`http://thesi.generalassemb.ly:8080/comment/${postId}`)
 // }
-
-
-
-
-
-
-
-
 
 // WHEN POSTING FULL LIST OF POSTS, ONLY ALLOW DELETE FOR YOUR POSTS
 // - Post to landing?
@@ -208,25 +223,11 @@ if (window.location.pathname == "/landing.html") {
 
 
 
-// < #${id#} >
 
 
 
-// MAKING IT SO WE CAN VIEW COMMENTS IN DOM
-// TAKE A RESPONSE AND SEND THEM TO THE DOM (obviously those comments are attached to an ID)
-// In DOM, run this function
 
-function returnPostId(event) {
-    fetch("http://thesi.generalassemb.ly:8080/post/list")
-        .then((res) => {
-            return res.json();
-        })
-        .then((res) => {
-            event.target.parentNode.querySelector('id');
-        }
 
-    createComment(postId);
-}
 
 
 
