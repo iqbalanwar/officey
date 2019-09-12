@@ -1,3 +1,4 @@
+/*============================= REGISTRATION AND LOGIN =============================*/
 if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "regLogin.html") {
     console.log("You're in your regLogin!");
     document.querySelector('.submit').addEventListener("click", makeUser);
@@ -71,6 +72,7 @@ function loginUser() {
 }
 
 
+/*============================= POSTS AND COMMENTS ON LANDING PAGE =============================*/
 
 
 // TAKES USER INPUT
@@ -96,11 +98,7 @@ function makePost(event) {
             return res.json();
         })
         .then((res) => {
-            // const postId = res.id;
-            // console.log(postId);
             postToLanding(res);
-            // return res;
-            //console.log(window.location);
         })
         .catch((error) => {
             console.log(error);
@@ -131,10 +129,12 @@ function postToLanding() {
             for (let i = 0; i < res.length; i++) {
                 // CREATE AN ITEM, WITH H3 AND P TAGS
                 const item = document.createElement('li');
-                item.className = ""
+                item.classList.add("post");
                 item.id = `${res[i].id}`;
                 const title = document.createElement('h3');
+                title.classList.add("postTitle");
                 const post = document.createElement('p');
+                post.classList.add("postText");
                 // const deletePost = document.createElement('button');
                 // deletePost.classList.add("deletePost");
                 // deletePost.innerText = "Delete Post";
@@ -204,11 +204,9 @@ function createComment(id) {
         })
         // FIGURE OUT TO REFRESH THE PAGE ONLY AFTER THE POST WAS FINISHED
     // window.location.reload(false);
-
 }
 // VIEW COMMENTS ON A POST
-// 
-// GET REQUEST
+// GET REQUEST RETURNS AN ARRAY OF COMMENTS OF THAT POST
 function seeComments(id) {
     fetch(`http://thesi.generalassemb.ly:8080/post/${id}/comment`, {
         headers: {
@@ -221,16 +219,20 @@ function seeComments(id) {
         .then((res) => {
 
             const listOfComments = document.createElement('ul');
+            listOfComments.classList.add("listOfComments");
             const post = document.getElementById(`${id}`);
 
             for (let i = 0; i < res.length; i++) {
                 const commentItem = document.createElement('li');
+                commentItem.classList.add("comment");
+                commentItem.id = `${res[i].id}`;
+                commentId = res[i].id;
                 const commentText = document.createElement('p');
+                commentText.classList.add("commentText");
                 commentText.innerText = res[i].text;
 
                 commentItem.append(commentText);
                 listOfComments.append(commentItem);
-
 
                 // COMPARE LOCALSTORAGE(USERNAME) TO USER.USERNAME
                 // ONLY MAKE BUTTONS FOR THOSE
@@ -239,12 +241,8 @@ function seeComments(id) {
                     deleteComment.classList.add("deleteComment");
                     deleteComment.innerText = "Delete Comment";
                     commentItem.append(deleteComment);
+                    deleteComment.addEventListener("click", function(commentId){})
                 }
-
-
-                
-
-
             }
             
             post.append(listOfComments);
@@ -252,7 +250,6 @@ function seeComments(id) {
         .then((error) => {
             console.log(error);
         })
-
 }
 
 
