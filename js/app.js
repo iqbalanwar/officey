@@ -136,9 +136,15 @@ function postToLanding() {
                 title.innerText = res[i].title;
                 post.innerText = res[i].description;
 
-                item.appendChild(title);
-                item.appendChild(post);
+                const commentForm = document.createElement('form');
+                const commentField = document.createElement('textarea');
+                const submitComment = document.createElement('button');
 
+                // // commentForm.appendChild(commentField);
+                // // commentForm.appendChild(submitComment);
+                commentForm.append(commentField, submitComment);
+
+                item.append(title, post, commentForm);
                 list.appendChild(item);
             }
             
@@ -179,22 +185,22 @@ if (window.location.pathname == "/landing.html") {
 // WHEN POSTING FULL LIST OF POSTS, ONLY ALLOW DELETE FOR YOUR POSTS
 // - Post to landing?
 // - ONLY ALLOW DELETE BUTTON ON MY POSTS
-function getPostId() {
-    fetch("http://thesi.generalassemb.ly:8080/user/post", {
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('user')
-        }
-    })
-        .then((res) => {
-            return res.json();
-        })
-        .then((res) => {
-            console.log(res[0].id);
-            const postId = res[0].id;
-            return postId;
-            // console.log(res[0]); 
-        })
-}
+// function getPostId() {
+//     fetch("http://thesi.generalassemb.ly:8080/user/post", {
+//         headers: {
+//             "Authorization": "Bearer " + localStorage.getItem('user')
+//         }
+//     })
+//         .then((res) => {
+//             return res.json();
+//         })
+//         .then((res) => {
+//             console.log(res[0].id);
+//             const postId = res[0].id;
+//             return postId;
+//             // console.log(res[0]); 
+//         })
+// }
 
 
 
@@ -209,75 +215,18 @@ function getPostId() {
 // MAKING IT SO WE CAN VIEW COMMENTS IN DOM
 // TAKE A RESPONSE AND SEND THEM TO THE DOM (obviously those comments are attached to an ID)
 // In DOM, run this function
-function makeComment(event) {
-    event.preventDefault();
 
-    getPostId();
-
-    const comment = document.querySelector('.commentField').value;
-
-    fetch(`http://thesi.generalassemb.ly:8080/comment/${postId}`, {
-        method: 'POST',
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('user'),
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            text: comment
-        })
-    })
+function returnPostId(event) {
+    fetch("http://thesi.generalassemb.ly:8080/post/list")
         .then((res) => {
             return res.json();
         })
         .then((res) => {
-            commentToPost(res);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-}
-// TAKES USER INPUT
-// PUTS USER INPUT INTO A LIST ITEM
-// APPENDS LIST ITEM TO LANDING.HTML
-// Posts our post to landing lol
-function commentToPost() {
-
-    fetch("http://thesi.generalassemb.ly:8080/user/post", {
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('user')
+            event.target.parentNode.querySelector('id');
         }
-    })
-        .then((res) => {
-            return res.json();
-        })
-        .then((res) => {
-            const list = document.querySelector('.allPosts');
-            // window.location.reload(false);
-            // if (window.location.href.indexOf('reload') == -1) {
-            //     window.location.replace(window.location.href + '?reload');
-            // }
 
-            for (let i = 0; i < res.length; i++) {
-                const item = document.createElement('li');
-                const title = document.createElement('h3');
-                const post = document.createElement('p');
-
-                title.innerText = res[i].title;
-                post.innerText = res[i].description;
-
-                item.appendChild(title);
-                item.appendChild(post);
-
-                list.appendChild(item);
-            }
-
-            // window.location.reload(false);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+    createComment(postId);
 }
-
 
 
 
