@@ -43,6 +43,7 @@ function loginUser() {
     // LOGIN USER USING THE CREDENTIALS
     const userEmail = document.querySelector('.loginEmail').value;
     const userPassword = document.querySelector('.loginPassword').value;
+    localStorage.setItem('username', userEmail);
 
     fetch('http://thesi.generalassemb.ly:8080/login', {
         method: 'POST',
@@ -99,6 +100,7 @@ function makePost(event) {
         })
         .then((res) => {
             postToLanding(res);
+            window.location.reload(false);
         })
         .catch((error) => {
             console.log(error);
@@ -111,7 +113,7 @@ function makePost(event) {
 // Posts our post to landing lol
 function postToLanding() {
 
-    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+    fetch("http://thesi.generalassemb.ly:8080/post/list", {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('user')
         }
@@ -121,12 +123,8 @@ function postToLanding() {
         })
         .then((res) => {
             const list = document.querySelector('.allPosts');
-            // window.location.reload(false);
-            // if (window.location.href.indexOf('reload') == -1) {
-            //     window.location.replace(window.location.href + '?reload');
-            // }
             
-            for (let i = 0; i < res.length; i++) {
+            for (let i = (res.length -1); i > (res.length - 11); i--) {
                 // CREATE AN ITEM, WITH H3 AND P TAGS
                 const item = document.createElement('li');
                 item.classList.add("post");
@@ -135,16 +133,12 @@ function postToLanding() {
                 title.classList.add("postTitle");
                 const post = document.createElement('p');
                 post.classList.add("postText");
-                // const deletePost = document.createElement('button');
-                // deletePost.classList.add("deletePost");
-                // deletePost.innerText = "Delete Post";
-                // deletePost.addEventListener('click', deletePost);
                 title.innerText = res[i].title;
                 post.innerText = res[i].description;
 
 
 
-                seeComments(item.id);
+                seeComments(res[i].id);
 
 
 
@@ -161,10 +155,7 @@ function postToLanding() {
                     createComment(event.target.parentNode.getAttribute('id'));
                 });
 
-                // COMMENT FORM TAKES FIELD, SUBMIT BTN, DELETE BTN
-                // commentForm.append(commentField, submitComment, deleteComment);
-
-                // ITEM TAKES TITLE, POST, AND COMMENT FORM
+                // ITEM TAKES TITLE, POST, COMMENTFIELD, AND SUBMITCOMMENT
                 item.append(title, post, commentField, submitComment);
                 list.append(item);
             }
@@ -199,6 +190,9 @@ function createComment(id) {
         .then((res) => {
             return res.json();
         })
+        .then((res) => {
+            location.reload(false);
+        })
         .then((error) => {
             console.log(error);
         })
@@ -207,8 +201,8 @@ function createComment(id) {
 }
 // VIEW COMMENTS ON A POST
 // GET REQUEST RETURNS AN ARRAY OF COMMENTS OF THAT POST
-function seeComments(id) {
-    fetch(`http://thesi.generalassemb.ly:8080/post/${id}/comment`, {
+function seeComments(postId) {
+    fetch(`http://thesi.generalassemb.ly:8080/post/${postId}/comment`, {
         headers: {
             "Content-Type":"application.json"
         }
@@ -220,13 +214,16 @@ function seeComments(id) {
 
             const listOfComments = document.createElement('ul');
             listOfComments.classList.add("listOfComments");
-            const post = document.getElementById(`${id}`);
+            listOfComments.id = `listComments_${postId}`;
+            const post = document.getElementById(`${postId}`);
 
             for (let i = 0; i < res.length; i++) {
                 const commentItem = document.createElement('li');
                 commentItem.classList.add("comment");
-                commentItem.id = `${res[i].id}`;
-                commentId = res[i].id;
+
+                commentItem.id = `comment_${res[i].id}`;
+                // commentId = res[i].id;
+                
                 const commentText = document.createElement('p');
                 commentText.classList.add("commentText");
                 commentText.innerText = res[i].text;
@@ -234,15 +231,33 @@ function seeComments(id) {
                 commentItem.append(commentText);
                 listOfComments.append(commentItem);
 
-                // COMPARE LOCALSTORAGE(USERNAME) TO USER.USERNAME
-                // ONLY MAKE BUTTONS FOR THOSE
-                if (localStorage.getItem('username') == res[i].user.username) {
-                    const deleteComment = document.createElement('button');
-                    deleteComment.classList.add("deleteComment");
-                    deleteComment.innerText = "Delete Comment";
-                    commentItem.append(deleteComment);
-                    deleteComment.addEventListener("click", function(commentId){})
-                }
+                // EVERYTHING HAS A DELETE BUTTON
+                // BUT SEND AN ERROR IF USER TRIES TO DELETE SOMETHING THAT'S NOT THEIRS
+                const deleteComment = document.createElement('button');
+                deleteComment.classList.add("deleteComment");
+                deleteComment.innerText = "Delete Comment";
+                commentItem.append(deleteComment);
+                // SO, THIS FUNCTION IS WORKING. YOU CAN DELETE
+                // HOWEVER, YOU STILL GET AN ASYNC ERROR
+                deleteComment.addEventListener("click", function () {
+                    fetch((`http://thesi.generalassemb.ly:8080/comment/${res[i].id}`), {
+                        method: 'DELETE',
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem('user'),
+                            "Content-Type": "application/json"
+                        }
+                    })
+                        // .then((res) => {
+                        //     return res.json()
+                        // })
+                        .then((res) => {
+                            // WHY IS IT NOT TAKING POST ID?
+                            updateComments(listOfComments.id, commentItem.id);
+                        })
+                        .then((error) => {
+                            console.log(error);
+                        })
+                })
             }
             
             post.append(listOfComments);
@@ -251,7 +266,12 @@ function seeComments(id) {
             console.log(error);
         })
 }
-
+function updateComments(listOfComments, commentId) {
+    const listComments = document.getElementById(`${listOfComments}`);
+    const comment = document.querySelector(`#${commentId}`);
+    listComments.removeChild(comment);
+    // console.log(comment);
+}
 
 
 
@@ -263,76 +283,6 @@ function seeComments(id) {
 // TAKES USER INPUT FOR WHAT THEY WANT TO DELETE
 // CHECK FOR THAT ID IN THE ARRAY
 // DELETE? COMMENT?
-// function commentToPost() {
-//     fetch(`http://thesi.generalassemb.ly:8080/comment/${postId}`)
-// }
-
-// WHEN POSTING FULL LIST OF POSTS, ONLY ALLOW DELETE FOR YOUR POSTS
-// - Post to landing?
-// - ONLY ALLOW DELETE BUTTON ON MY POSTS
-// function getPostId() {
-//     fetch("http://thesi.generalassemb.ly:8080/user/post", {
-//         headers: {
-//             "Authorization": "Bearer " + localStorage.getItem('user')
-//         }
-//     })
-//         .then((res) => {
-//             return res.json();
-//         })
-//         .then((res) => {
-//             console.log(res[0].id);
-//             const postId = res[0].id;
-//             return postId;
-//             // console.log(res[0]); 
-//         })
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// GET USER POSTS WHICH IS AN ARRAY
-// TAKE USER CHOICE (input) OF WHICH ITEM THEY WANT TO DELETE
-// GO THROUGH THE ARRAY TO GET TO THAT INDEX ITEM OF THE USER CHOICE (store the id)
-// Separate function: DELETE THAT ID WHICH WAS STORED
-// function getPostId() {
-//     fetch("http://thesi.generalassemb.ly:8080/user/post", {
-//         headers: {
-//             "Authorization": "Bearer " + localStorage.getItem('user')
-//         }
-//     })
-//         // .then((res) => {
-//         //     return res.json();
-//         // })
-//         .then((res) => { // Returns null. Wonderful.
-//             console.log(res);
-//         })
-// }
-// getPostId();
 
 
 
@@ -348,7 +298,7 @@ OUR PROBLEMS RIGHT NOW:
 - When the user is logged in, don't allow them to access the login page
 
 - DELETE POSTS
-- DELETE COMMENTS
+- DELETE COMMENTS (Technically finished but does not update DOM)
 - UPDATE PROFILE (which is just the mobile #)
 
 BONUS:

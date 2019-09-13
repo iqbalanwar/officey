@@ -48,8 +48,12 @@ ul li p {
 }
 
 ul{
-width: 900px;
 
+  border: 1px solid #EEE;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 900px;
 }
 
 body{
