@@ -53,7 +53,7 @@ ul{
   border: 1px solid #EEE;
   border-radius: 25px;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   background-color: white;
 }
 
