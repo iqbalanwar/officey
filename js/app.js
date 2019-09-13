@@ -75,6 +75,10 @@ function loginUser() {
 
 /*============================= POSTS AND COMMENTS ON LANDING PAGE =============================*/
 
+if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "landing.html") {
+    document.querySelector('.postSubmit').addEventListener("click", makePost);
+    postToLanding();
+}
 
 // TAKES USER INPUT
 // CALLS A FUNCTION TO POST IT IN THE DOM (postToLanding())
@@ -165,11 +169,6 @@ function postToLanding() {
         })
 }
 
-if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "landing.html") {
-    document.querySelector('.postSubmit').addEventListener("click", makePost); 
-    postToLanding();
-}
-
 function createComment(id) {
     // WHEN SUBMIT COMMENT IS CLICKED, GET THE PARENT NODE'S ID
     // PARENT NODE IS THE POST
@@ -208,6 +207,7 @@ function seeComments(postId) {
         }
     })
         .then((res) => {
+            //console.log(res);
             return res.json();
         })
         .then((res) => {
@@ -252,7 +252,11 @@ function seeComments(postId) {
                         // })
                         .then((res) => {
                             // WHY IS IT NOT TAKING POST ID?
-                            updateComments(listOfComments.id, commentItem.id);
+                            if (res.status === 200) {
+                                updateComments(listOfComments.id, commentItem.id);
+                            } else {
+                                alert("Please delete only your own comments.");
+                            }
                         })
                         .then((error) => {
                             console.log(error);
@@ -274,6 +278,64 @@ function updateComments(listOfComments, commentId) {
 }
 
 
+/*============================= POSTS AND COMMENTS ON PROFILE PAGE =============================*/
+
+if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "profile.html") {
+    postOnProfile();
+}
+function postOnProfile() {
+    fetch("http://thesi.generalassemb.ly:8080/user/post", {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('user')
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            const list = document.querySelector('userPosts').querySelector('.allPosts');
+            console.log(list);
+
+            for (let i = (res.length - 1); i > (res.length - 11); i--) {
+                // CREATE AN ITEM, WITH H3 AND P TAGS
+                const item = document.createElement('li');
+                item.classList.add("post");
+                item.id = `${res[i].id}`;
+                const title = document.createElement('h3');
+                title.classList.add("postTitle");
+                const post = document.createElement('p');
+                post.classList.add("postText");
+                title.innerText = res[i].title;
+                post.innerText = res[i].description;
+
+
+
+                seeComments(res[i].id);
+
+
+
+
+                // CREATE A COMMENT FORM, WITH A TEXT AREA, SUBMIT AND DELETE BUTTONS
+                //const commentForm = document.createElement('form');
+                const commentField = document.createElement('textarea');
+                commentField.classList.add("commentField");
+                const submitComment = document.createElement('button');
+                submitComment.classList.add("submitComment");
+                submitComment.innerText = "Comment";
+                submitComment.addEventListener('click', function () {
+                    event.preventDefault();
+                    createComment(event.target.parentNode.getAttribute('id'));
+                });
+
+                // ITEM TAKES TITLE, POST, COMMENTFIELD, AND SUBMITCOMMENT
+                item.append(title, post, commentField, submitComment);
+                list.append(item);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
 
 
 
@@ -290,15 +352,11 @@ function updateComments(listOfComments, commentId) {
 
 /*
 OUR PROBLEMS RIGHT NOW:
- 
-- The list of all posts should show up by default (TECHNICALLY FIXED)
-    - Right now, the workaround is that we can see all the posts only when we post
 
 - Show the user that their registration already exists/login does not exist
-- When the user is logged in, don't allow them to access the login page
+- When the user is logged in, don't allow them to access the login page (Welcome user!)
 
 - DELETE POSTS
-- DELETE COMMENTS (Technically finished but does not update DOM)
 - UPDATE PROFILE (which is just the mobile #)
 
 BONUS:

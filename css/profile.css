@@ -79,9 +79,9 @@ ul li p {
 
 ul{
   border: 1px solid #EEE;
-  border-radius: 25px;
+  border-radius: 10px;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   background-color: white;
 }
 body{
