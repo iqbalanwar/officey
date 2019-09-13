@@ -22,19 +22,21 @@ input[type="password"] {
     display: flex;
     justify-content: space-around;
     font-size: 20px;
-    margin: 20px 0;
     position: fixed;
     top: 0;
     width: 100%;
+    background-color: white;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 .navbar a {
     text-decoration: none !important;
 }
 .navbar img {
     background-color: red;
-    width: 180px;
-    height: 200px;
-    margin: -6% 0;
+    height: 60px;
+    width: 150px;
+    margin: -1% 0;
 }
 .container form{
   display: flex;
