@@ -1,3 +1,7 @@
+body{
+  font-family: helvetica;
+}
+
 .navbar {
     display: flex;
     justify-content: space-around;
@@ -22,11 +26,14 @@
 
 .content h1{
   text-align: center;
+
+
 }
 
 .postTitle{
   display: block;
   margin-bottom: 20px;
+  margin-left: 122px;
 }
 
 input[type="text"] {
@@ -36,6 +43,7 @@ input[type="text"] {
 
 .postField {
   font-size: 20px;
+  margin-left: 122px;
 }
 
 
@@ -46,15 +54,33 @@ ul li h3{
 ul li p {
   font-size: 15px;
 }
+.newestPosts{
+  margin-left: 122px;
+}
+
+footer p {
+  margin-left: 122px;
+  margin-top: 120px;
+}
 
 ul{
-
-  border: 1px solid #EEE;
+  margin-left: 122px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   width: 900px;
 }
+
+.title{
+color: white;
+background: black;
+border: 3px solid black;
+border-radius: 10px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+outline: 1px solid white;
+outline-offset: -5px;
+}
+
 
 body{
   padding-top: 90px;
@@ -70,7 +96,8 @@ body{
 .post{
   background-color: lightblue;
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .posttTitle{
@@ -103,8 +130,12 @@ list-style-type: none;
   margin-bottom: 10px;
   width: 200px;
   display: block;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.content h2{
+  margin-left: 122px;
+}
 .commentText{
 
 }
