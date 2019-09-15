@@ -1,12 +1,12 @@
-// function checkLogin() {
-//     if (localStorage.getItem('user') != null) {
-//         // Edit navbar a loginstatus
-//         // Say welcome!
-//         const aTag = document.querySelector(".navbar").lastChild;
-//         aTag.display = "none";
-//     }
-// }
-// checkLogin();
+function checkLogin() {
+    if (localStorage.getItem('user') != 'undefined') {
+        // Edit navbar a loginstatus
+        // Say welcome!
+        const aTag = document.querySelector("nav").lastElementChild;
+        // console.log(aTag);
+        aTag.style.display = "none";
+    }
+}
 
 /*============================= REGISTRATION AND LOGIN =============================*/
 if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "regLogin.html") {
@@ -86,6 +86,7 @@ function loginUser() {
 /*============================= POSTS AND COMMENTS ON LANDING PAGE =============================*/
 
 if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "landing.html") {
+    checkLogin();
     document.querySelector('.postSubmit').addEventListener("click", makePost);
     postToLanding();
 }
@@ -356,11 +357,7 @@ function postOnProfile() {
 
 
 
-// GET USER POSTS
-// STORE ALL IDS IN ARRAY
-// TAKES USER INPUT FOR WHAT THEY WANT TO DELETE
-// CHECK FOR THAT ID IN THE ARRAY
-// DELETE? COMMENT?
+
 
 
 
