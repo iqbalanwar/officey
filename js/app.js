@@ -1,6 +1,16 @@
+// function checkLogin() {
+//     if (localStorage.getItem('user') != null) {
+//         // Edit navbar a loginstatus
+//         // Say welcome!
+//         const aTag = document.querySelector(".navbar").lastChild;
+//         aTag.display = "none";
+//     }
+// }
+// checkLogin();
+
 /*============================= REGISTRATION AND LOGIN =============================*/
 if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "regLogin.html") {
-    console.log("You're in your regLogin!");
+    console.log("You're in the regLogin!");
     document.querySelector('.submit').addEventListener("click", makeUser);
     document.querySelector('.loginSubmit').addEventListener("click", loginUser);
 }
@@ -103,8 +113,10 @@ function makePost(event) {
             return res.json();
         })
         .then((res) => {
-            postToLanding(res);
             window.location.reload(false);
+        })
+        .then((res) => {
+            postToLanding(res);
         })
         .catch((error) => {
             console.log(error);
@@ -135,10 +147,13 @@ function postToLanding() {
                 item.id = `${res[i].id}`;
                 const title = document.createElement('h3');
                 title.classList.add("postTitle");
+                const postingUser = document.createElement('h3');
+                postingUser.classList.add("username");
                 const post = document.createElement('p');
                 post.classList.add("postText");
-                title.innerText = res[i].title;
+                title.innerText = `Title: ${res[i].title}`;
                 post.innerText = res[i].description;
+                postingUser.innerText = `Post by: ${res[i].user.username}`;
 
 
 
@@ -160,7 +175,7 @@ function postToLanding() {
                 });
 
                 // ITEM TAKES TITLE, POST, COMMENTFIELD, AND SUBMITCOMMENT
-                item.append(title, post, commentField, submitComment);
+                item.append(title, postingUser, post, commentField, submitComment);
                 list.append(item);
             }
         })
@@ -224,19 +239,25 @@ function seeComments(postId) {
                 commentItem.id = `comment_${res[i].id}`;
                 // commentId = res[i].id;
                 
+                const commenter = document.createElement('p');
+                commenter.classList.add("commenter");
+                commenter.style.fontWeight = "bold";
+                commenter.innerText = `${res[i].user.username}: `;
                 const commentText = document.createElement('p');
                 commentText.classList.add("commentText");
                 commentText.innerText = res[i].text;
 
-                commentItem.append(commentText);
-                listOfComments.append(commentItem);
+                // commentItem.append(commentText);
+                
 
                 // EVERYTHING HAS A DELETE BUTTON
                 // BUT SEND AN ERROR IF USER TRIES TO DELETE SOMETHING THAT'S NOT THEIRS
                 const deleteComment = document.createElement('button');
                 deleteComment.classList.add("deleteComment");
                 deleteComment.innerText = "Delete Comment";
-                commentItem.append(deleteComment);
+                commentItem.append(commenter, commentText, deleteComment);
+
+                listOfComments.append(commentItem);
                 // SO, THIS FUNCTION IS WORKING. YOU CAN DELETE
                 // HOWEVER, YOU STILL GET AN ASYNC ERROR
                 deleteComment.addEventListener("click", function () {
@@ -308,12 +329,7 @@ function postOnProfile() {
                 title.innerText = res[i].title;
                 post.innerText = res[i].description;
 
-
-
                 seeComments(res[i].id);
-
-
-
 
                 // CREATE A COMMENT FORM, WITH A TEXT AREA, SUBMIT AND DELETE BUTTONS
                 //const commentForm = document.createElement('form');
