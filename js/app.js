@@ -1,12 +1,46 @@
-// function checkLogin() {
-//     if (localStorage.getItem('user') != null) {
-//         // Edit navbar a loginstatus
-//         // Say welcome!
-//         const aTag = document.querySelector(".navbar").lastChild;
-//         aTag.display = "none";
-//     }
-// }
-// checkLogin();
+function checkLogin() {   
+    if (localStorage.getItem('user') != null) {
+        // Edit navbar a loginstatus
+        // Say welcome!
+        const aTag = document.querySelector('nav').lastElementChild;
+        aTag.style.display = "none";
+
+        const welcomeUser = document.createElement('div');
+        welcomeUser.innerText = `Welcome "${localStorage.getItem('username')}"`;
+        document.querySelector('.navbar').append(welcomeUser);
+
+        // const dropdown = document.createElement('div');
+        // dropdown.classList.add("dropdown");
+        // const logoutButton = document.createElement('button');
+        // logoutButton.classList.add("dropbtn");
+        // const dropdownContent = document.createElement('div')
+        // dropdownContent.classList.add("dropdown-content");
+        // const signOut = document.createElement('a');
+        // signOut.classList.add("sign-out");
+        // signOut.innerText = "Sign out"
+        // // const logoutButton = document.querySelector('.sign-out');
+        // // logoutButton.innerText = "Log out";
+        // dropdownContent.append(signOut);
+        // dropdown.append(logoutButton, dropdownContent);
+        // document.querySelector('.navbar').append(dropdown);
+
+
+        // signOut.addEventListener('click', () => {
+        //     localStorage.removeItem('user');
+        //     localStorage.removeItem('username');
+
+        //     document.querySelector('.dropdown').style.display = "none";
+
+        //     aTag.style.display = "block";
+
+        //     window.location.reload(false);
+        // });
+
+
+        // dropdown.append(logoutButton);
+        
+    }
+}
 
 /*============================= REGISTRATION AND LOGIN =============================*/
 if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "regLogin.html") {
@@ -41,7 +75,7 @@ function makeUser() {
         .then((res) => {
             localStorage.setItem('user', res.token);
             if (res.token) { // DO I GET A RESPONSE? IF YES:
-                window.location.href = "landing.html";
+                window.location.href = "index.html";
             }
             // makePost();
         })
@@ -53,7 +87,8 @@ function loginUser() {
     // LOGIN USER USING THE CREDENTIALS
     const userEmail = document.querySelector('.loginEmail').value;
     const userPassword = document.querySelector('.loginPassword').value;
-    localStorage.setItem('username', userEmail);
+    const username = userEmail.substring(0, (userEmail.lastIndexOf('@')));
+    localStorage.setItem('username', username);
 
     fetch('http://thesi.generalassemb.ly:8080/login', {
         method: 'POST',
@@ -74,7 +109,7 @@ function loginUser() {
         .then((res) =>{
             localStorage.setItem('user', res.token);
             if (res.token) { // DO I GET A RESPONSE? IF YES:
-                window.location.href = "landing.html";
+                window.location.href = "index.html";
             }
         })
         .catch((error) =>{
@@ -85,7 +120,8 @@ function loginUser() {
 
 /*============================= POSTS AND COMMENTS ON LANDING PAGE =============================*/
 
-if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "landing.html") {
+if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "index.html") {
+    checkLogin();
     document.querySelector('.postSubmit').addEventListener("click", makePost);
     postToLanding();
 }
@@ -129,17 +165,13 @@ function makePost(event) {
 // Posts our post to landing lol
 function postToLanding() {
 
-    fetch("http://thesi.generalassemb.ly:8080/post/list", {
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('user')
-        }
-    })
+    fetch("http://thesi.generalassemb.ly:8080/post/list")
         .then((res) => {
             return res.json();
         })
         .then((res) => {
             const list = document.querySelector('.allPosts');
-            
+
             for (let i = (res.length -1); i > (res.length - 11); i--) {
                 // CREATE AN ITEM, WITH H3 AND P TAGS
                 const item = document.createElement('li');
@@ -302,6 +334,7 @@ function updateComments(listOfComments, commentId) {
 /*============================= POSTS AND COMMENTS ON PROFILE PAGE =============================*/
 
 if (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1) == "profile.html") {
+    checkLogin();
     postOnProfile();
 }
 function postOnProfile() {
@@ -356,11 +389,7 @@ function postOnProfile() {
 
 
 
-// GET USER POSTS
-// STORE ALL IDS IN ARRAY
-// TAKES USER INPUT FOR WHAT THEY WANT TO DELETE
-// CHECK FOR THAT ID IN THE ARRAY
-// DELETE? COMMENT?
+
 
 
 
